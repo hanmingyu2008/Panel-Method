@@ -1,0 +1,12 @@
+Josh The Engineer 先生在代码SPVP_Airfoil_N中的错误
+注:我的认为不一定对,因此保留了两份代码
+1. 代码第349行调用的函数COMPUTE_KL_VPM_N.m有问题。
+    其中的想法其实就是把两个机翼看作一个机翼一样求K和L，但是代码当中似乎在A=...的那行忘掉了坐标变换，phi(jInd(j))写成了phi(j)
+    函数COMPUTE_KL_VPM_N1和..._N2都是可行的代替
+2. 第381行有问题
+    在组装A当中横纵坐标都是代表gamma和Kutta条件的几项的时候，忽略了其他机翼上的gamma对某个机翼的后缘处Kutta条件的影响。
+    脚本SPVP_Airfoil_N1.m对此做了修正
+3. 第433行对term4的计算有问题
+    应当是所有panel的gamma值乘以其对i号panel的贡献(其中i号panel自己对自己的贡献在term3中表示)，但是这里误认为所有gamma是一样的，在Mutli-Airfoil的问题里很明显并不妥当
+    脚本SPVP_Airfoil_N1.m对此做了修正
+至此,SPVP_Airfoil_N1.m的运行结果和我的python代码data_processN之结果相差在1e-5量级.
